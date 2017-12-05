@@ -19,7 +19,7 @@ app.use(parser.urlencoded({extended: false}));
 app.use(express.static("public"));
 
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/", {
+mongoose.connect("mongodb://localhost/news", {
   useMongoClient: true
 });
 

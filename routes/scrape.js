@@ -11,14 +11,14 @@ module.exports = function(app){
 
 		axios.get(url).then(function(response){
 			var $ = cheerio.load(response.data);
-				$("a").each(function(i, elm){
+				$("a.story-link").each(function(i, elm){
 
 				var result = {};
 
 				result.link = $(this).attr("href");
-				result.title = $(this).children(".story-meta").attr("h2");
+				result.title = $(this).children(".story-meta").children("h2.headline").text();
 
-				console.log(result.title);
+				console.log(result);
 
 				db.Article
 					.create(result)
@@ -41,5 +41,18 @@ module.exports = function(app){
 			.catch(function(err){
 				res.json(err);
 			});
+	});
+
+	app.get("/articles/:id", function(req, res) {
+  
+    db.Article
+    .findOne({ _id: req.params.id })
+    .populate("note")
+    .then(function(dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
 	});
 };
